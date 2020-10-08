@@ -36,7 +36,11 @@
         </header>
         
         <section>
-            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Turn type categories on and off using the checkboxes to filter each type.</p>
+            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Check boxes to turn layers on and off</p>
+        </section>
+
+        <section>
+            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Zoom in to click points</p>
         </section>
         
         <footer class="js-footer"></footer>
@@ -59,28 +63,28 @@
 
                 <div>
                     <label>
-                        <input type="checkbox" class="article-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" />
+                        <input type="checkbox" class="article-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
                         <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213401Untitled-2.1.svg' width="15" height="15"> Article</img>
                     </label>
                 </div>
 
                 <div>
                     <label>
-                        <input type="checkbox" class="video-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" />
+                        <input type="checkbox" class="video-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
                         <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213433Untitled-4.1.svg' width="15" height="15"> Video</img>
                     </label>
                 </div>
 
                 <div>
                     <label>
-                        <input type="checkbox" class="english-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" />
+                        <input type="checkbox" class="english-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
                         <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213507Untitled-5.1.svg' width="15" height="15"> English Language Frequencies</img>
                     </label>
                 </div>
 
                 <div>
                     <label>
-                        <input type="checkbox" class="spanish-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" />
+                        <input type="checkbox" class="spanish-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
                         <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213542Untitled-6.1.svg' width="15" height="15"> Spanish Language Frequencies</img>
                     </label>
                 </div>
@@ -306,7 +310,7 @@
     } 
 
 //Listens to map movements to fire layer selector functions
-    map.on('move', handleCheckboxChange);
+    // map.on('move', handleCheckboxChange);
 
 //CREATE LAYERS AND POP-UPS
 
@@ -777,7 +781,7 @@
 // Wait for the map to load for the first time
     map.on('load', () => {
         console.log('Map has loaded!');
-        handleCheckboxChange();
+        handleCheckboxChange;
     });
 
 //Console Updates
@@ -808,6 +812,8 @@
     // console.log('video:', videoCheckbox.checked);
     // console.log('english:', englishCheckbox.checked);
     // console.log('spanish:', spanishCheckbox.checked);
+
+    map.on('move', handleCheckboxChange);
 
 </script>
 </body>
