@@ -240,7 +240,7 @@
 //Creates Zoom-based layer filter for pop-ups and clustering
     function updateZoomEpisodes() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 6) {
+            if (map.getZoom().toFixed(2) < 4) {
                 episodesLayerC.show()
                 episodesLayerP.hide()
             }
@@ -251,7 +251,7 @@
     }
     function updateZoomRecent() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 6) {
+            if (map.getZoom().toFixed(2) < 4) {
                 recentLayerC.show()
                 recentLayerP.hide()
             }
@@ -262,7 +262,7 @@
     }   
     function updateZoomArticle() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 6) {
+            if (map.getZoom().toFixed(2) < 4) {
                 articleLayerC.show()
                 articleLayerP.hide()
             }
@@ -273,7 +273,7 @@
     } 
     function updateZoomVideo() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 6) {
+            if (map.getZoom().toFixed(2) < 4) {
                 videoLayerC.show()
                 videoLayerP.hide()
             }
@@ -284,7 +284,7 @@
     } 
     function updateZoomEnglish() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 6) {
+            if (map.getZoom().toFixed(2) < 4) {
                 englishLayerC.show()
                 englishLayerP.hide()
             }
@@ -295,7 +295,7 @@
     } 
     function updateZoomSpanish() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 6) {
+            if (map.getZoom().toFixed(2) < 4) {
                 spanishLayerC.show()
                 spanishLayerP.hide()
             }
