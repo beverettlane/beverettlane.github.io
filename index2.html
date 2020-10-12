@@ -32,15 +32,15 @@
 <!-- Add legend data -->
     <div class="box">
         <header>
-            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;">Legend</h1>
+            <h1 style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:22px;">Legend</h1>
         </header>
         
         <section>
-            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Check boxes to turn layers on and off</p>
+            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Check boxes to turn layers on and off</p>
         </section>
 
         <section>
-            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Zoom in to click points</p>
+            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Zoom in to click points</p>
         </section>
         
         <footer class="js-footer"></footer>
@@ -48,44 +48,44 @@
         <section>
             <div class="checkboxes">
                 <div>
-                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
-                        <input type="checkbox" class="radio-checkbox" checked/>
-                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009175947Episode.svg' width="15" height="15"> Radio Episodes</img>
+                    <label>
+                        <input type="checkbox" class="radio-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213234Untitled-1.1.svg' width="15" height="15"> Radio Episodes</img>
                     </label>
                 </div>
                 
                 <div>
-                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
-                        <input type="checkbox" class="recent-checkbox" checked/>
-                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009180505Recent.svg' width="15" height="15"> Recent Episodes</img>
+                    <label>
+                        <input type="checkbox" class="recent-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213319Untitled-3.1.svg' width="15" height="15"> Recent Episodes</img>
                     </label>
                 </div>
 
                 <div>
-                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
-                        <input type="checkbox" class="article-checkbox" />
-                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009193050Article.svg' width="15" height="15"> Article</img>
+                    <label>
+                        <input type="checkbox" class="article-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213401Untitled-2.1.svg' width="15" height="15"> Article</img>
                     </label>
                 </div>
 
                 <div>
-                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
-                        <input type="checkbox" class="video-checkbox" />
-                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009181305Video.svg' width="15" height="15"> Video</img>
+                    <label>
+                        <input type="checkbox" class="video-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213433Untitled-4.1.svg' width="15" height="15"> Video</img>
                     </label>
                 </div>
 
                 <div>
-                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
-                        <input type="checkbox" class="english-checkbox" />
-                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009193553English.svg' width="15" height="15"> English Language Frequencies</img>
+                    <label>
+                        <input type="checkbox" class="english-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213507Untitled-5.1.svg' width="15" height="15"> English Language Frequencies</img>
                     </label>
                 </div>
 
                 <div>
-                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
-                        <input type="checkbox" class="spanish-checkbox" />
-                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009180924Spanish.svg' width="15" height="15" > Spanish Language Frequencies</img>
+                    <label>
+                        <input type="checkbox" class="spanish-checkbox" style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200909213542Untitled-6.1.svg' width="15" height="15"> Spanish Language Frequencies</img>
                     </label>
                 </div>
             </div>
@@ -111,7 +111,7 @@
         container: 'map',
         style: carto.basemaps.positron,
         center: [-80, 40],
-        zoom: 4
+        zoom: 3
     });
 
 //Listen to every move event caused by the user
@@ -212,8 +212,7 @@
             else {
                 spanishLayerC.hide()
                 spanishLayerP.hide()
-            }        
-            console.log('Test');
+            }
     }
 
 //Creates listeners to checkboxes so handleCheckboxChange() is fired when checkbox is clicked
@@ -245,7 +244,7 @@
 //Creates Zoom-based layer filter for pop-ups and clustering
     function updateZoomEpisodes() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 5) {
+            if (map.getZoom().toFixed(2) < 4) {
                 episodesLayerC.show()
                 episodesLayerP.hide()
             }
@@ -256,7 +255,7 @@
     }
     function updateZoomRecent() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 5) {
+            if (map.getZoom().toFixed(2) < 4) {
                 recentLayerC.show()
                 recentLayerP.hide()
             }
@@ -267,7 +266,7 @@
     }   
     function updateZoomArticle() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 5) {
+            if (map.getZoom().toFixed(2) < 4) {
                 articleLayerC.show()
                 articleLayerP.hide()
             }
@@ -278,7 +277,7 @@
     } 
     function updateZoomVideo() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 5) {
+            if (map.getZoom().toFixed(2) < 4) {
                 videoLayerC.show()
                 videoLayerP.hide()
             }
@@ -289,7 +288,7 @@
     } 
     function updateZoomEnglish() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 5) {
+            if (map.getZoom().toFixed(2) < 4) {
                 englishLayerC.show()
                 englishLayerP.hide()
             }
@@ -300,7 +299,7 @@
     } 
     function updateZoomSpanish() {
         const zoom = map.getZoom().toFixed(2);
-            if (map.getZoom().toFixed(2) < 5) {
+            if (map.getZoom().toFixed(2) < 4) {
                 spanishLayerC.show()
                 spanishLayerP.hide()
             }
@@ -333,23 +332,21 @@
             @count: clusterCount()
             @v_features: viewportFeatures(@count)
             width: sqrt(clusterCount())*3 + 10
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009180316Episode.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200904180038icon_mic2.svg')
+            color: rgba(79, 181, 166, 0.6)
             strokeWidth: 0
             resolution: 32
         `);
     
     //Add cluster layer to map
         const episodesLayerC = new carto.Layer('episodesC', episodesSource, episodesVizC);
-        episodesLayerC.on('loaded', hideLoader, function() {
-            if (radioCheckbox.checked == false) {
-                episodesLayerC.hide();
-            }
-        });
+        episodesLayerC.on('loaded', hideLoader);
         episodesLayerC.addTo(map);
 
     //Create visualization for pop-ups layer
         const episodesVizP = new carto.Viz(`
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009180316Episode.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200904180038icon_mic2.svg')
+            color: rgba(79, 181, 166, 0.6)
             @count: clusterCount()
             @v_features: viewportFeatures(@count)
             width: 15
@@ -389,13 +386,13 @@
                 //Add pop-up using mapboxgl
                     const coords = featureEvent.coordinates;
                     const html = `
-                        <div style="background-color:rgb(255, 220, 51);border:20px solid rgb(255, 220, 51);">
-                            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
+                        <div style="background-color:rgba(79, 181, 166);border:20px solid rgb(79, 181, 166);">
+                            <h1 style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
                         </div>
                         <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.subtitle.value}</p1>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;">${feature.variables.subtitle.value}</p1>
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Location: ${feature.variables.location.value}
                         </div>
                     `;
                     new mapboxgl.Popup()
@@ -413,23 +410,21 @@
             @count: clusterCount()
             @v_features: viewportFeatures(@count)
             width: 30
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009180730Recent.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200904180038icon_mic2.svg')
+            color: rgba(223, 220, 35, 0.6)
             strokeWidth: 0
             resolution: 32     
         `);
 
     //Add cluster layer to map    
         const recentLayerC = new carto.Layer('recentC', recentSource, recentVizC);
-        recentLayerC.on('loaded', function() {
-            if (recentCheckbox.checked == false) {
-                recentLayerC.hide();
-            }
-        });
+        recentLayerC.on('loaded', hideLoader);
         recentLayerC.addTo(map);
 
     //Create visualization for pop-ups layer
         const recentVizP = new carto.Viz(`
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009180730Recent.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20200904180038icon_mic2.svg')
+            color: rgba(223, 220, 35, 0.6)
             width: 30
             strokeWidth: 0
             resolution: 8
@@ -467,13 +462,13 @@
             // Add pop-up using mapboxgl
                 const coords = featureEvent.coordinates;
                 const html = `
-                    <div style="background-color:rgb(247, 9, 9); border:20px solid rgb(247, 9, 9);">
-                        <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
+                    <div style="background-color:rgb(0,0,0); border:20px solid rgb(0,0,0);">
+                        <h1 style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
                     </div>
                     <div>
-                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.subtitle.value}</p1>
-                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
-                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
+                        <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;">${feature.variables.subtitle.value}</p1>
+                        <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
+                        <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Location: ${feature.variables.location.value}
                     </div>
                 `;
                 new mapboxgl.Popup()
@@ -491,23 +486,21 @@
             @count: clusterCount()
             @v_features: viewportFeatures(@count)
             width: sqrt(clusterCount())*3 + 10
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009193431Article.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201003023535Article.svg')
+            color: rgba(131, 100, 154, 0.6)
             strokeWidth: 0
             resolution: 32
         `);
     
     //Add cluster layer to map
         const articleLayerC = new carto.Layer('articlesC', articleSource, articleVizC);
-        articleLayerC.on('loaded', function() {
-            if (articleCheckbox.checked == false) {
-                articleLayerC.hide();
-            }
-        });
+        articleLayerC.on('loaded', hideLoader);
         articleLayerC.addTo(map);
     
     //Create visualization for pop-ups layer
         const articleVizP = new carto.Viz(`
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009193431Article.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201003023535Article.svg')
+            color: rgba(131, 100, 154, 0.6)
             width: 15
             strokeWidth: 0
             resolution: 8
@@ -543,13 +536,13 @@
                 //Add pop-up using mapboxgl
                     const coords = featureEvent.coordinates;
                     const html = `
-                        <div style="background-color:rgb(60, 166, 247);border:20px solid rgb(60, 166, 247);">
-                            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
+                        <div style="background-color:rgb(131, 100, 154);border:20px solid rgb(131, 100, 154);">
+                            <h1 style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
                         </div>
                         <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.description.value}</p1>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;">${feature.variables.description.value}</p1>
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Location: ${feature.variables.location.value}
                         </div>
                     `;
                     new mapboxgl.Popup()
@@ -567,23 +560,21 @@
             @count: clusterCount()
             @v_features: viewportFeatures(@count)
             width: sqrt(clusterCount())*3 + 10
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009181513Video.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201003024609Video.svg')
+            color: rgba(219, 56, 80, 0.6)
             strokeWidth: 0
             resolution: 32
         `);
 
     //Add cluster layer to map
         const videoLayerC = new carto.Layer('videoC', videoSource, videoVizC);
-        videoLayerC.on('loaded', function() {
-            if (videoCheckbox.checked == false) {
-                videoLayerC.hide();
-            }
-        });
+        videoLayerC.on('loaded', hideLoader);
         videoLayerC.addTo(map);
 
     //Create visualization for pop-ups layer
         const videoVizP = new carto.Viz(`
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009181513Video.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201003024609Video.svg')
+            color: rgba(219, 56, 80, 0.6)
             width: 15
             strokeWidth: 0
             resolution: 8
@@ -621,14 +612,14 @@
             //Add pop-up using mapboxgl
                 const coords = featureEvent.coordinates;
                 const html = `
-                    <div style="background-color:rgb(104, 27, 221); border:20px solid rgb(104, 27, 221);">
-                        <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
+                    <div style="background-color:rgb(219, 56, 80); border:20px solid rgb(219, 56, 80);">
+                        <h1 style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
                     </div>
                     <div>
-                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.description.value}</p1>
-                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
-                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
-                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Attribution: ${feature.variables.attribution.value}
+                        <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;">${feature.variables.description.value}</p1>
+                        <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
+                        <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Location: ${feature.variables.location.value}
+                        <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Attribution: ${feature.variables.attribution.value}
                     </div>
                 `;
                 new mapboxgl.Popup()
@@ -646,22 +637,21 @@
             @count: clusterCount()
             @v_features: viewportFeatures(@count)
             width: sqrt(clusterCount())*3 + 10
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009193900English.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201003024324Station.svg')
+            color: rgba(23, 28, 188, 0.6)
             strokeWidth: 0
             resolution: 32
         `);
     
     //Add cluster layer to map
         const englishLayerC = new carto.Layer('englishC', englishSource, englishVizC);
-        englishLayerC.on('loaded', function() {
-            if (englishCheckbox.checked == false) {
-                englishLayerC.hide();
-            }
-        });        englishLayerC.addTo(map);
+        englishLayerC.on('loaded', hideLoader);
+        englishLayerC.addTo(map);
 
     //Create visualization for pop-ups layer
         const englishVizP = new carto.Viz(`
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009193900English.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201003024324Station.svg')
+            color: rgba(23, 28, 188, 0.6)
             width: 15
             strokeWidth: 0
             resolution: 8
@@ -697,13 +687,13 @@
                 //Add pop-up using mapboxgl
                     const coords = featureEvent.coordinates;
                     const html = `
-                        <div style="background-color:rgb(0, 112, 60); border:20px solid rgb(0, 112, 60);">
-                            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.station.value}</h1>
+                        <div style="background-color:rgb(23, 28, 188); border:20px solid rgb(23,28,188);">
+                            <h1 style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.station.value}</h1>
                         </div>
                         <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.frequency.value}</p1>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.homepage.value}" target="_blank">Click here</a></p>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Air Times Provided: ${feature.variables.air_times_provided.value}
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;">${feature.variables.frequency.value}</p1>
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Link: <a href="${feature.variables.homepage.value}" target="_blank">Click here</a></p>
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Air Times Provided: ${feature.variables.air_times_provided.value}
                         </div>
                     `;
                     new mapboxgl.Popup()
@@ -721,23 +711,21 @@
             @count: clusterCount()
             @v_features: viewportFeatures(@count)
             width: sqrt(clusterCount())*3 + 10
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009181201Spanish.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201003024324Station.svg')
+            color: rgba(0,0,0,0.6)
             strokeWidth: 0
             resolution: 32
         `);
 
     //Add cluster layer to map    
         const spanishLayerC = new carto.Layer('spanishC', spanishSource, spanishVizC);
-        spanishLayerC.on('loaded', function() {
-            if (spanishCheckbox.checked == false) {
-                spanishLayerC.hide();
-            }
-        });
+        spanishLayerC.on('loaded', hideLoader);
         spanishLayerC.addTo(map);
 
     //Create visualization for pop-ups layer
         const spanishVizP = new carto.Viz(`
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009181201Spanish.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201003024324Station.svg')
+            color: rgba (0,0,0,0.6)
             width: 15
             strokeWidth: 0
             resolution: 8
@@ -773,13 +761,13 @@
                 //Add pop-up using mapboxgl
                     const coords = featureEvent.coordinates;
                     const html = `
-                        <div style="background-color:rgb(50, 55, 59); border:20px solid rgb(50, 55, 59);">
-                            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.station.value}</h1>
+                        <div style="background-color:rgb(0,0,0); border:20px solid rgb(0,0,0);">
+                            <h1 style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.station.value}</h1>
                         </div>
                         <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.frequency.value}</p1>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.homepage.value}" target="_blank">Click here</a></p>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Program: ${feature.variables.program.value}
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:16px;">${feature.variables.frequency.value}</p1>
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Link: <a href="${feature.variables.homepage.value}" target="_blank">Click here</a></p>
+                            <p style = "font-family:Georgia, 'Times New Roman', Times, serif;font-size:14px;">Program: ${feature.variables.program.value}
                         </div>
                     `;
                     new mapboxgl.Popup()
@@ -793,6 +781,7 @@
 // Wait for the map to load for the first time
     map.on('load', () => {
         console.log('Map has loaded!');
+        handleCheckboxChange;
     });
 
 //Console Updates
