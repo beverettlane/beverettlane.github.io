@@ -11,11 +11,6 @@
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css" rel="stylesheet" />
     <link href="https://carto.com/developers/carto-vl/v1.4.4/examples/maps/style.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://libs.cartocdn.com/airship-style/v2.4.1/airship.css">
-    <link rel="stylesheet" href="https://libs.cartocdn.com/airship-icons/v2.4.1/icons.css">
-    <script type="module" src="https://libs.cartocdn.com/airship-components/v2.4.1/airship/airship.esm.js"></script>
-    <script nomodule="" src="https://libs.cartocdn.com/airship-components/v2.4.1/airship/airship.js"></script>
-
     <style>
         li {
             display: flex;
@@ -30,16 +25,7 @@
 </head>
 
 <body>
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
-    <link
-        rel="stylesheet"
-        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
-        type="text/css"
-    />
-<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-    <div id="map"></div>    
+    <div id="map"></div>
     <div id="js-zoom"></div>
     <aside class="toolbox">
 
@@ -116,27 +102,9 @@
         </div>
     </div>
 
-<!-- Splash modal -->
-<main id="modal" style="display: block; left: 45%; top: 40%;">
-    <div class="as-modal">
-        <div class="as-modal__content">     
-            <h1 class="as-title">Welcome to the Yale Climate Connections' Story Locations, Stations Map</h1>
-            <br>
-            <p class="as-body as-font--medium">The “Story Locations, Stations Map” is intended to show viewers that climate change is not only a global issue, but it may be happening as close as your backyard. </p>
-            <br>
-            <p class="as-body as-font--medium">This map shows information on climate stories from around the world because climate change is occurring in every nation and city. </p> 
-            <br>
-            <p class="as-body as-font--medium">In order to view stories or radio station information, turn on the desired layers, zoom in, and then click on icon of interest. </p>          
-            <button class="as-btn as-btn--primary" onclick="document.getElementById('modal').style.display='none';">Go to map</button>      
-        </div>
-    </div>
-</main>
-
 <script>
 
 //MAP SETUP
-
-mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd2p4ZXpwNmo5YnMifQ.SqWE9LzcCAseUoH4ehrpYA'
 
 //Add basemap and set properties
     const map = new mapboxgl.Map({
@@ -162,13 +130,6 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
     const nav = new mapboxgl.NavigationControl();
     map.addControl(nav, 'top-left');
     map.addControl(new mapboxgl.FullscreenControl(), 'top-left');
-    map.addControl(
-        new MapboxGeocoder({
-            accessToken: mapboxgl.accessToken,
-            mapboxgl: mapboxgl
-        }),
-        'bottom-left'
-    );
 
 //FUNCTIONS
 
@@ -386,30 +347,6 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
         });
         episodesLayerC.addTo(map);
 
-    //Create cluster pop-up
-        const episodesinteractivityC = new carto.Interactivity(episodesLayerC);
-            episodesinteractivityC.on('featureClick', featureEvent => {
-                featureEvent.features.forEach((feature) => {});
-
-                //Get the first feature
-                    const feature = featureEvent.features[0];
-                    if (!feature) {
-                        return;
-                    }
-
-                //Add pop-up using mapboxgl
-                    const coords = featureEvent.coordinates;
-                    const html = `
-                        <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Zoom in to view pop-ups</p1>
-                        </div>
-                    `;
-                    new mapboxgl.Popup()
-                        .setLngLat([coords.lng, coords.lat])
-                        .setHTML(html)
-                        .addTo(map);
-            });    
-
     //Create visualization for pop-ups layer
         const episodesVizP = new carto.Viz(`
             symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009180316Episode.svg')
@@ -432,8 +369,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
         episodesLayerP.addTo(map);
 
     //Create pop-up
-        const episodesinteractivityP = new carto.Interactivity(episodesLayerP);
-            episodesinteractivityP.on('featureClick', featureEvent => {
+        const episodesinteractivity = new carto.Interactivity(episodesLayerP);
+            episodesinteractivity.on('featureClick', featureEvent => {
                 featureEvent.features.forEach((feature) => {
                     const title = feature.variables.title.value;
                     const subtitle = feature.variables.subtitle.value;
@@ -490,30 +427,6 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
         });
         recentLayerC.addTo(map);
 
-    //Create cluster pop-up
-        const recentinteractivityC = new carto.Interactivity(recentLayerC);
-            recentinteractivityC.on('featureClick', featureEvent => {
-                featureEvent.features.forEach((feature) => {});
-
-                //Get the first feature
-                    const feature = featureEvent.features[0];
-                    if (!feature) {
-                        return;
-                    }
-
-                //Add pop-up using mapboxgl
-                    const coords = featureEvent.coordinates;
-                    const html = `
-                        <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Zoom in to view pop-ups</p1>
-                        </div>
-                    `;
-                    new mapboxgl.Popup()
-                        .setLngLat([coords.lng, coords.lat])
-                        .setHTML(html)
-                        .addTo(map);
-            });  
-
     //Create visualization for pop-ups layer
         const recentVizP = new carto.Viz(`
             symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009180730Recent.svg')
@@ -534,8 +447,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
         recentLayerP.addTo(map);
 
     //Create pop-up
-        const recentinteractivityP = new carto.Interactivity(recentLayerP);
-            recentinteractivityP.on('featureClick', featureEvent => {
+        const recentinteractivity = new carto.Interactivity(recentLayerP);
+            recentinteractivity.on('featureClick', featureEvent => {
                 featureEvent.features.forEach((feature) => {
                     const title = feature.variables.title.value;
                     const subtitle = feature.variables.subtitle.value;
@@ -591,30 +504,6 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
             }
         });
         articleLayerC.addTo(map);
-
-    //Create cluster pop-up
-        const articleinteractivityC = new carto.Interactivity(articleLayerC);
-            articleinteractivityC.on('featureClick', featureEvent => {
-                featureEvent.features.forEach((feature) => {});
-
-                //Get the first feature
-                    const feature = featureEvent.features[0];
-                    if (!feature) {
-                        return;
-                    }
-
-                //Add pop-up using mapboxgl
-                    const coords = featureEvent.coordinates;
-                    const html = `
-                        <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Zoom in to view pop-ups</p1>
-                        </div>
-                    `;
-                    new mapboxgl.Popup()
-                        .setLngLat([coords.lng, coords.lat])
-                        .setHTML(html)
-                        .addTo(map);
-            });  
     
     //Create visualization for pop-ups layer
         const articleVizP = new carto.Viz(`
@@ -635,8 +524,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
         articleLayerP.addTo(map);
 
     //Create pop-up
-        const articleinteractivityP = new carto.Interactivity(articleLayerP);
-            articleinteractivityP.on('featureClick', featureEvent => {
+        const articleinteractivity = new carto.Interactivity(articleLayerP);
+            articleinteractivity.on('featureClick', featureEvent => {
                 featureEvent.features.forEach((feature) => {
                     const title = feature.variables.title.value;
                     const description = feature.variables.description.value;
@@ -654,7 +543,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
                 //Add pop-up using mapboxgl
                     const coords = featureEvent.coordinates;
                     const html = `
-                        <div style="background-color:rgb(0, 112, 60);border:20px solid rgb(0, 112, 60);">
+                        <div style="background-color:rgb(60, 166, 247);border:20px solid rgb(60, 166, 247);">
                             <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
                         </div>
                         <div>
@@ -692,30 +581,6 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
         });
         videoLayerC.addTo(map);
 
-    //Create cluster pop-up
-        const videointeractivityC = new carto.Interactivity(videoLayerC);
-            videointeractivityC.on('featureClick', featureEvent => {
-                featureEvent.features.forEach((feature) => {});
-
-                //Get the first feature
-                    const feature = featureEvent.features[0];
-                    if (!feature) {
-                        return;
-                    }
-
-                //Add pop-up using mapboxgl
-                    const coords = featureEvent.coordinates;
-                    const html = `
-                        <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Zoom in to view pop-ups</p1>
-                        </div>
-                    `;
-                    new mapboxgl.Popup()
-                        .setLngLat([coords.lng, coords.lat])
-                        .setHTML(html)
-                        .addTo(map);
-            });  
-
     //Create visualization for pop-ups layer
         const videoVizP = new carto.Viz(`
             symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201009181513Video.svg')
@@ -736,8 +601,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
         videoLayerP.addTo(map);
 
     //Create pop-up
-        const videointeractivityP = new carto.Interactivity(videoLayerP);
-            videointeractivityP.on('featureClick', featureEvent => {
+        const videointeractivity = new carto.Interactivity(videoLayerP);
+            videointeractivity.on('featureClick', featureEvent => {
                 featureEvent.features.forEach((feature) => {
                     const title = feature.variables.title.value;
                     const description = feature.variables.description.value;
@@ -792,32 +657,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
             if (englishCheckbox.checked == false) {
                 englishLayerC.hide();
             }
-        });        
-        englishLayerC.addTo(map);
-
-    //Create cluster pop-up
-        const englishinteractivityC = new carto.Interactivity(englishLayerC);
-            englishinteractivityC.on('featureClick', featureEvent => {
-                featureEvent.features.forEach((feature) => {});
-
-                //Get the first feature
-                    const feature = featureEvent.features[0];
-                    if (!feature) {
-                        return;
-                    }
-
-                //Add pop-up using mapboxgl
-                    const coords = featureEvent.coordinates;
-                    const html = `
-                        <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Zoom in to view pop-ups</p1>
-                        </div>
-                    `;
-                    new mapboxgl.Popup()
-                        .setLngLat([coords.lng, coords.lat])
-                        .setHTML(html)
-                        .addTo(map);
-            });  
+        });        englishLayerC.addTo(map);
 
     //Create visualization for pop-ups layer
         const englishVizP = new carto.Viz(`
@@ -838,8 +678,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
         englishLayerP.addTo(map);
 
     //Create pop-up
-        const englishinteractivityP = new carto.Interactivity(englishLayerP);
-            englishinteractivityP.on('featureClick', featureEvent => {
+        const englishinteractivity = new carto.Interactivity(englishLayerP);
+            englishinteractivity.on('featureClick', featureEvent => {
                 featureEvent.features.forEach((feature) => {
                     const station = feature.variables.station.value;
                     const frequency = feature.variables.frequency.value;
@@ -857,7 +697,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
                 //Add pop-up using mapboxgl
                     const coords = featureEvent.coordinates;
                     const html = `
-                        <div style="background-color:rgb(60, 166, 247); border:20px solid rgb(60, 166, 247);">
+                        <div style="background-color:rgb(0, 112, 60); border:20px solid rgb(0, 112, 60);">
                             <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.station.value}</h1>
                         </div>
                         <div>
@@ -894,30 +734,6 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
             }
         });
         spanishLayerC.addTo(map);
-    
-    //Create cluster pop-up
-        const spanishinteractivityC = new carto.Interactivity(spanishLayerC);
-            spanishinteractivityC.on('featureClick', featureEvent => {
-                featureEvent.features.forEach((feature) => {});
-
-                //Get the first feature
-                    const feature = featureEvent.features[0];
-                    if (!feature) {
-                        return;
-                    }
-
-                //Add pop-up using mapboxgl
-                    const coords = featureEvent.coordinates;
-                    const html = `
-                        <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Zoom in to view pop-ups</p1>
-                        </div>
-                    `;
-                    new mapboxgl.Popup()
-                        .setLngLat([coords.lng, coords.lat])
-                        .setHTML(html)
-                        .addTo(map);
-            });  
 
     //Create visualization for pop-ups layer
         const spanishVizP = new carto.Viz(`
@@ -938,8 +754,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
         spanishLayerP.addTo(map);
 
     //Create pop-up
-        const spanishinteractivityP = new carto.Interactivity(spanishLayerP);
-            spanishinteractivityP.on('featureClick', featureEvent => {
+        const spanishinteractivity = new carto.Interactivity(spanishLayerP);
+            spanishinteractivity.on('featureClick', featureEvent => {
                 featureEvent.features.forEach((feature) => {
                     const station = feature.variables.station.value;
                     const frequency = feature.variables.frequency.value;
