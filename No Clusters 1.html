@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Interactive Filter | CARTO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <script src="https://libs.cartocdn.com/carto-vl/v1.4.4/carto-vl.min.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css" rel="stylesheet" />
+    <link href="https://carto.com/developers/carto-vl/v1.4.4/examples/maps/style.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://libs.cartocdn.com/airship-style/v2.4.1/airship.css">
+    <link rel="stylesheet" href="https://libs.cartocdn.com/airship-icons/v2.4.1/icons.css">
+    <script type="module" src="https://libs.cartocdn.com/airship-components/v2.4.1/airship/airship.esm.js"></script>
+    <script nomodule="" src="https://libs.cartocdn.com/airship-components/v2.4.1/airship/airship.js"></script>
+
+    <style>
+        li {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .point-mark {
+            margin-right: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+    <link
+        rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
+        type="text/css"
+    />
+<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+    <div id="map"></div>    
+    <div id="js-zoom"></div>
+    <aside class="toolbox">
+
+<!-- Add legend data -->
+    <div class="box">
+        <header>
+            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;">Story & Station Map</h1>
+        </header>
+        
+        <footer class="js-footer"></footer>
+
+        <header>
+            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:18px;">Stories</h1>
+        </header>
+        
+        <section>
+            <div class="checkboxes">
+                <div>
+                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
+                        <input type="checkbox" class="radio-checkbox" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164023Episodes2.svg' width="15" height="15"> Radio Episodes</img>
+                    </label>
+                </div>
+                
+                <div>
+                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
+                        <input type="checkbox" class="recent-checkbox" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164232Recent2.svg' width="15" height="15"> Recent Episodes</img>
+                    </label>
+                </div>
+
+                <div>
+                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
+                        <input type="checkbox" class="article-checkbox" />
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014163329Article2.svg' width="15" height="15"> Article</img>
+                    </label>
+                </div>
+
+                <div>
+                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
+                        <input type="checkbox" class="video-checkbox" />
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164727Video2.svg' width="15" height="15"> Video</img>
+                    </label>
+                </div>
+
+                <header>
+                    <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:18px;">Stations</h1>
+                </header>
+
+                <div>
+                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
+                        <input type="checkbox" class="english-checkbox" />
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014163735English2.svg' width="15" height="15"> English Language Frequencies</img>
+                    </label>
+                </div>
+
+                <div>
+                    <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
+                        <input type="checkbox" class="spanish-checkbox" />
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201015180720Spanish3.svg' width="15" height="15" > Spanish Language Frequencies</img>
+                    </label>
+                </div>
+            </div>
+        </section>
+    </div>
+    </aside>
+
+<!-- Set up Loader -->
+    <div id="loader">
+        <div class="CDB-LoaderIcon CDB-LoaderIcon--big">
+          <svg class="CDB-LoaderIcon-spinner" viewBox="0 0 50 50">
+            <circle class="CDB-LoaderIcon-path" cx="25" cy="25" r="20" fill="none"></circle>
+          </svg>
+        </div>
+    </div>
+
+<!-- Splash modal -->
+<main id="modal" style="display: block; left: 45%; top: 40%;">
+    <div class="as-modal">
+        <div class="as-modal__content">     
+            <h1 class="as-title">Welcome to the Yale Climate Connections' Story Locations, Stations Map</h1>
+            <br>
+            <p class="as-body as-font--medium">The “Story Locations, Stations Map” is intended to show viewers that climate change is not only a global issue, but it may be happening as close as your backyard. </p>
+            <br>
+            <p class="as-body as-font--medium">This map shows information on climate stories from around the world because climate change is occurring in every nation and city. </p> 
+            <br>
+            <p class="as-body as-font--medium">In order to view stories or radio station information, turn on the desired layers, zoom in, and then click on icon of interest. </p>          
+            <button class="as-btn as-btn--primary" onclick="document.getElementById('modal').style.display='none';">Go to map</button>      
+        </div>
+    </div>
+</main>
+
+<script>
+
+//MAP SETUP
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd2p4ZXpwNmo5YnMifQ.SqWE9LzcCAseUoH4ehrpYA'
+
+//Add basemap and set properties
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/beverettlane/ckg6wxtok06kg19pc99x47hvn',
+        center: [-80, 40],
+        zoom: 4
+    });
+
+//Listen to every move event caused by the user
+    const displayCenter = () => {
+        const center = map.getCenter();
+        const longitude = center.lng.toFixed(6);
+        const latitude = center.lat.toFixed(6);
+        const bearing = map.getBearing().toFixed(0);
+        const zoom = map.getZoom().toFixed(2);
+        console.log(`Center: [${longitude}, ${latitude}] - Zoom: ${zoom} - Bearing: ${bearing} degrees`);
+    };
+    map.on('move', displayCenter);
+    map.off('move', displayCenter);
+
+//Add zoom controls
+    const nav = new mapboxgl.NavigationControl();
+    map.addControl(nav, 'top-left');
+    map.addControl(new mapboxgl.FullscreenControl(), 'top-left');
+    map.addControl(
+        new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl
+        }),
+        'bottom-left'
+    );
+
+//FUNCTIONS
+
+//Creates loader
+    function hideLoader() {
+        document.getElementById('loader').style.opacity = '0';
+    }
+
+//Creates functional checkboxes
+    function handleCheckboxChange() {
+        //Find every checkbox and store them in separate variables
+            var radioCheckbox = document.querySelector('.radio-checkbox');
+            var recentCheckbox = document.querySelector('.recent-checkbox');
+            var articleCheckbox = document.querySelector('.article-checkbox');
+            var videoCheckbox = document.querySelector('.video-checkbox');
+            var englishCheckbox = document.querySelector('.english-checkbox');
+            var spanishCheckbox = document.querySelector('.spanish-checkbox');
+
+        //Create an array of all of the values corresponding to checked boxes.
+        //If a checkbox is checked, add that filter value to our array.
+            var dataType = [];
+                if (radioCheckbox.checked) {
+                    dataType.push("'radio'");
+                }
+                if (recentCheckbox.checked) {
+                    dataType.push("'recent'");
+                }
+                if (articleCheckbox.checked) {
+                    dataType.push("'article'");
+                }
+                if (videoCheckbox.checked) {
+                    dataType.push("'video'");
+                }
+                if (englishCheckbox.checked) {
+                    dataType.push("'english'");
+                }
+                if (spanishCheckbox.checked) {
+                    dataType.push("'spanish'");
+                }
+    
+        //When checkbox is checked, hide relevant layers while still showing appropriate other layers
+            if (radioCheckbox.checked == true) {
+                episodesLayerP.show()
+            }
+            else {
+                episodesLayerP.hide()
+            }
+            if (recentCheckbox.checked == true) {
+                recentLayerP.show()
+            }
+            else {
+                recentLayerP.hide()
+            }
+            if (articleCheckbox.checked == true) {
+                articleLayerP.show()
+            }
+            else {
+                articleLayerP.hide()
+            }
+            if (videoCheckbox.checked == true) {
+                videoLayerP.show()
+            }
+            else {
+                videoLayerP.hide()
+            }
+            if (englishCheckbox.checked == true) {
+                englishLayerP.show()
+            }
+            else {
+                englishLayerP.hide()
+            }
+            if (spanishCheckbox.checked == true) {
+                spanishLayerP.show()
+            }
+            else {
+                spanishLayerP.hide()
+            } 
+    }
+
+//Creates listeners to checkboxes so handleCheckboxChange() is fired when checkbox is clicked
+    var radioCheckbox = document.querySelector('.radio-checkbox');
+        radioCheckbox.addEventListener('change', function () {
+        handleCheckboxChange();
+    });
+    var recentCheckbox = document.querySelector('.recent-checkbox');
+        recentCheckbox.addEventListener('change', function () {
+        handleCheckboxChange();
+    });
+    var articleCheckbox = document.querySelector('.article-checkbox');
+        articleCheckbox.addEventListener('change', function () {
+        handleCheckboxChange();
+    });
+    var videoCheckbox = document.querySelector('.video-checkbox');
+        videoCheckbox.addEventListener('change', function () {
+        handleCheckboxChange();
+    });
+    var englishCheckbox = document.querySelector('.english-checkbox');
+        englishCheckbox.addEventListener('change', function () {
+        handleCheckboxChange();
+    });
+    var spanishCheckbox = document.querySelector('.spanish-checkbox');
+        spanishCheckbox.addEventListener('change', function () {
+        handleCheckboxChange();
+    });
+
+//Listens to map movements to fire layer selector functions
+    // map.on('move', handleCheckboxChange);
+
+//CREATE LAYERS AND POP-UPS
+
+//Defines User
+    carto.setDefaultConfig({
+        serverURL: 'https://{user}.carto.com'
+    });
+    carto.setDefaultAuth({
+        username: 'yale-climate-connections',
+        apiKey: 'FEDSymZNibB5kAz7aosYPw'
+    });
+
+//Radio Episodes Layer
+    // Define source
+        const episodesSource = new carto.source.Dataset('radio_episodes_layer_1');
+
+    //Create visualization for pop-ups layer
+        const episodesVizP = new carto.Viz(`
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164157Episodes2.svg')
+            @count: clusterCount()
+            @v_features: viewportFeatures(@count)
+            width: 15
+            strokeColor: rgba(0,0,0,0.99)
+            resolution: 8
+            @currentFeatures: viewportCount()
+            @title: $title
+            @subtitle: $subtitle
+            @link: $link
+            @detail: $detail
+            @location: $location
+        `);
+        
+    //Add pop-up layer to map
+        const episodesLayerP = new carto.Layer('episodesP', episodesSource, episodesVizP);
+        episodesLayerP.on('loaded', hideLoader, function() {
+            if (radioCheckbox.checked == false) {
+                episodesLayerP.hide();
+            }
+        });
+        episodesLayerP.addTo(map);
+
+    //Create pop-up
+        const episodesinteractivityP = new carto.Interactivity(episodesLayerP);
+            episodesinteractivityP.on('featureClick', featureEvent => {
+                featureEvent.features.forEach((feature) => {
+                    const title = feature.variables.title.value;
+                    const subtitle = feature.variables.subtitle.value;
+                    const link = feature.variables.link.value;
+                    const detail= feature.variables.detail.value;
+                    const location=feature.variables.location.value;
+                    console.log(`${title}; ${subtitle}; ${link}; ${location}; ${detail}`);
+                });
+
+                //Get the first feature
+                    const feature = featureEvent.features[0];
+                    if (!feature) {
+                        return;
+                    }
+
+                //Add pop-up using mapboxgl
+                    const coords = featureEvent.coordinates;
+                    const html = `
+                        <div style="background-color: #345A83;border:20px solid #345A83;">
+                            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
+                        </div>
+                        <div>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.subtitle.value}</p1>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.link.value}" target="_blank">Read the story</a></p>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
+                        </div>
+                    `;
+                    new mapboxgl.Popup()
+                        .setLngLat([coords.lng, coords.lat])
+                        .setHTML(html)
+                        .addTo(map);
+            });
+
+//Recent Episodes Layer
+    // Define source
+    const recentSource = new carto.source.Dataset('featured_episodes_layer_2');
+
+    //Create visualization for pop-ups layer
+        const recentVizP = new carto.Viz(`
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164404Recent2.svg')
+            width: 30
+            strokeWidth: 0
+            resolution: 8
+            @currentFeatures: viewportCount()
+            @title: $title
+            @subtitle: $subtitle
+            @link: $link
+            @detail: $detail
+            @location: $location
+        `);
+        
+    //Add pop-up layer to map
+        const recentLayerP = new carto.Layer('recent', recentSource, recentVizP);
+        recentLayerP.on('loaded', function() {
+            if (recentCheckbox.checked == false) {
+                recentLayerP.hide();
+            }
+        });
+        recentLayerP.addTo(map);
+
+    //Create pop-up
+        const recentinteractivityP = new carto.Interactivity(recentLayerP);
+            recentinteractivityP.on('featureClick', featureEvent => {
+                featureEvent.features.forEach((feature) => {
+                    const title = feature.variables.title.value;
+                    const subtitle = feature.variables.subtitle.value;
+                    const link = feature.variables.link.value;
+                    const detail= feature.variables.detail.value;
+                    const location=feature.variables.location.value;
+                    console.log(`${title}; ${subtitle}; ${link}; ${location}; ${detail}`);
+                });
+
+            // Get the first feature
+                const feature = featureEvent.features[0];
+                if (!feature) {
+                    return;
+                }
+
+            // Add pop-up using mapboxgl
+                const coords = featureEvent.coordinates;
+                const html = `
+                    <div style="background-color: #BCD3F2; border:20px solid #BCD3F2;">
+                        <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
+                    </div>
+                    <div>
+                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.subtitle.value}</p1>
+                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.link.value}" target="_blank">Read the story</a></p>
+                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
+                    </div>
+                `;
+                new mapboxgl.Popup()
+                    .setLngLat([coords.lng, coords.lat])
+                    .setHTML(html)
+                    .addTo(map);
+            });
+
+//Articles Layer
+    // Define source
+        const articleSource = new carto.source.Dataset('article_layer'); 
+    
+    //Create visualization for pop-ups layer
+        const articleVizP = new carto.Viz(`
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014163551Article2.svg')
+            width: 15
+            strokeWidth: 0
+            resolution: 8
+            @count: clusterCount()
+            @title: $title
+            @description: $subtitle_description
+            @link: $link
+            @location: $location_city
+        `);
+        
+    //Add pop-up layer to map
+        const articleLayerP = new carto.Layer('articlesP', articleSource, articleVizP);
+        articleLayerP.on('loaded', function() {
+            if (articleCheckbox.checked == false) {
+                articleLayerP.hide();
+            }
+        });
+        articleLayerP.addTo(map);
+
+    //Create pop-up
+        const articleinteractivityP = new carto.Interactivity(articleLayerP);
+            articleinteractivityP.on('featureClick', featureEvent => {
+                featureEvent.features.forEach((feature) => {
+                    const title = feature.variables.title.value;
+                    const description = feature.variables.description.value;
+                    const link = feature.variables.link.value;
+                    const location= feature.variables.location.value;
+                    console.log(`${title}; ${description}; ${link}; ${location}`);
+                });
+
+                //Get the first feature
+                    const feature = featureEvent.features[0];
+                    if (!feature) {
+                        return;
+                    }
+
+                //Add pop-up using mapboxgl
+                    const coords = featureEvent.coordinates;
+                    const html = `
+                        <div style="background-color: #00C49A;border:20px solid #00C49A;">
+                            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
+                        </div>
+                        <div>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.description.value}</p1>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.link.value}" target="_blank">Read the story</a></p>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
+                        </div>
+                    `;
+                    new mapboxgl.Popup()
+                        .setLngLat([coords.lng, coords.lat])
+                        .setHTML(html)
+                        .addTo(map);
+            });
+
+//Video Layer
+    // Define source
+        const videoSource = new carto.source.Dataset('video_layer_2');
+
+    //Create visualization for pop-ups layer
+        const videoVizP = new carto.Viz(`
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164855Video2.svg')
+            width: 15
+            strokeWidth: 0
+            resolution: 8
+            @currentFeatures: viewportCount()
+            @title: $title
+            @description: $subtitle_description
+            @link: $link
+            @location: $location
+            @attribution: $detail
+        `);
+        
+    //Add pop-up layer to map
+        const videoLayerP = new carto.Layer('videoP', videoSource, videoVizP);
+        videoLayerP.on('loaded', function() {
+            if (videoCheckbox.checked == false) {
+                videoLayerP.hide();
+            }
+        });        videoLayerP.addTo(map);
+
+    //Create pop-up
+        const videointeractivityP = new carto.Interactivity(videoLayerP);
+            videointeractivityP.on('featureClick', featureEvent => {
+                featureEvent.features.forEach((feature) => {
+                    const title = feature.variables.title.value;
+                    const description = feature.variables.description.value;
+                    const link = feature.variables.link.value;
+                    const location= feature.variables.location.value;
+                    const attribution= feature.variables.attribution.value;
+                    console.log(`${title}; ${description}; ${link}; ${location}; ${attribution}`);
+                });
+
+            //Get the first feature
+                const feature = featureEvent.features[0];
+                if (!feature) {
+                    return;
+                }
+
+            //Add pop-up using mapboxgl
+                const coords = featureEvent.coordinates;
+                const html = `
+                    <div style="background-color: #ED6A5A; border:20px solid #ED6A5A;">
+                        <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.title.value}</h1>
+                    </div>
+                    <div>
+                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.description.value}</p1>
+                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.link.value}" target="_blank">Watch video</a></p>
+                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
+                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Attribution: ${feature.variables.attribution.value}
+                    </div>
+                `;
+                new mapboxgl.Popup()
+                    .setLngLat([coords.lng, coords.lat])
+                    .setHTML(html)
+                    .addTo(map);
+            });
+
+//English Frequencies Layer
+    // Define source
+        const englishSource = new carto.source.Dataset('english_frequencies_layer');
+
+    //Create visualization for pop-ups layer
+        const englishVizP = new carto.Viz(`
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201015181011English2.svg')
+            width: 15
+            strokeWidth: 0
+            resolution: 8
+            @currentFeatures: viewportCount()
+            @station: $station
+            @frequency: $frequency
+            @air_times_provided: $air_times_provided
+            @homepage: $homepage
+        `);
+        
+    //Add pop-up layer to map
+        const englishLayerP = new carto.Layer('englishP', englishSource, englishVizP);
+        englishLayerP.on('loaded', function() {
+            if (englishCheckbox.checked == false) {
+                englishLayerP.hide();
+            }
+        });
+        englishLayerP.addTo(map);
+
+    //Create pop-up
+        const englishinteractivityP = new carto.Interactivity(englishLayerP);
+            englishinteractivityP.on('featureClick', featureEvent => {
+                featureEvent.features.forEach((feature) => {
+                    const station = feature.variables.station.value;
+                    const frequency = feature.variables.frequency.value;
+                    const air_times_provided = feature.variables.air_times_provided.value;
+                    const homepage= feature.variables.homepage.value;
+                    console.log(`${station}; ${frequency}; ${air_times_provided}; ${homepage}`);
+                });
+
+                //Get the first feature
+                    const feature = featureEvent.features[0];
+                    if (!feature) {
+                        return;
+                    }
+
+                //Add pop-up using mapboxgl
+                    const coords = featureEvent.coordinates;
+                    const html = `
+                        <div style="background-color: #F3DFA2; border:20px solid #F3DFA2;">
+                            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.station.value}</h1>
+                        </div>
+                        <div>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Frequency: ${feature.variables.frequency.value}</p1>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.homepage.value}" target="_blank">Station website</a></p>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Air Times Provided: ${feature.variables.air_times_provided.value}
+                        </div>
+                    `;
+                    new mapboxgl.Popup()
+                        .setLngLat([coords.lng, coords.lat])
+                        .setHTML(html)
+                        .addTo(map);
+            });
+
+//Spanish Frequencies Layer
+    // Define source
+        const spanishSource = new carto.source.Dataset('spanish_frequencies_layer'); 
+
+    //Create visualization for pop-ups layer
+        const spanishVizP = new carto.Viz(`
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201015180854Spanish3.svg')
+            width: 15
+            strokeWidth: 0
+            resolution: 8
+            @currentFeatures: viewportCount()
+            @station: $station
+            @frequency: $frequency
+            @program: $program
+            @homepage: $homepage
+        `);
+        
+    //Add pop-up layer to map
+        const spanishLayerP = new carto.Layer('spanishP', spanishSource, spanishVizP);
+        spanishLayerP.on('loaded', function() {
+            if (spanishCheckbox.checked == false) {
+                spanishLayerP.hide();
+            }
+        });
+        spanishLayerP.addTo(map);
+
+    //Create pop-up
+        const spanishinteractivityP = new carto.Interactivity(spanishLayerP);
+            spanishinteractivityP.on('featureClick', featureEvent => {
+                featureEvent.features.forEach((feature) => {
+                    const station = feature.variables.station.value;
+                    const frequency = feature.variables.frequency.value;
+                    const program = feature.variables.program.value;
+                    const homepage= feature.variables.homepage.value;
+                    console.log(`${station}; ${frequency}; ${program}; ${homepage}`);
+                });
+
+                // Get the first feature
+                    const feature = featureEvent.features[0];
+                    if (!feature) {
+                        return;
+                    }
+
+                //Add pop-up using mapboxgl
+                    const coords = featureEvent.coordinates;
+                    const html = `
+                        <div style="background-color: #EDAE49; border:20px solid #EDAE49;">
+                            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.station.value}</h1>
+                        </div>
+                        <div>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Frequency: ${feature.variables.frequency.value}</p1>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.homepage.value}" target="_blank">Station website</a></p>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Program: ${feature.variables.program.value}
+                        </div>
+                    `;
+                    new mapboxgl.Popup()
+                        .setLngLat([coords.lng, coords.lat])
+                        .setHTML(html)
+                        .addTo(map);
+            });
+
+//CONSOLE LOG
+
+// Wait for the map to load for the first time
+    map.on('load', () => {
+        console.log('Map has loaded!');
+        handleCheckboxChange;
+    });
+
+//Console Updates
+    episodesLayerP.on('loaded', () => {
+        console.log('Episodes layer has loaded');
+    });
+    articleLayerP.on('loaded', () => {
+        console.log('Article layer has loaded');
+    });
+    recentLayerP.on('loaded', () => {
+        console.log('Recent Episodes layer has loaded');
+    });
+    videoLayerP.on('loaded', () => {
+        console.log('Video layer has loaded');
+    });
+    englishLayerP.on('loaded', () => {
+        console.log('English Frequencies layer has loaded');
+    });
+    spanishLayerP.on('loaded', () => {
+        console.log('Spanish Frequencies layer has loaded');
+    });
+    carto.on('loaded', [episodesLayerP, articleLayerP, videoLayerP, recentLayerP, englishLayerP, spanishLayerP], () => { console.log('All layers have loaded'); })
+
+//Logging out to make sure we get the checkboxes correctly
+    // console.log('radio:', radioCheckbox.checked);
+    // console.log('recent:', recentCheckbox.checked);
+    // console.log('article:', articleCheckbox.checked);
+    // console.log('video:', videoCheckbox.checked);
+    // console.log('english:', englishCheckbox.checked);
+    // console.log('spanish:', spanishCheckbox.checked);
+
+    map.on('move', handleCheckboxChange);
+
+</script>
+</body>
+</html>
