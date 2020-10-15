@@ -50,10 +50,6 @@
         </header>
         
         <footer class="js-footer"></footer>
-
-        <header>
-            <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:18px;">Stories</h1>
-        </header>
         
         <section>
             <div class="checkboxes">
@@ -85,10 +81,6 @@
                     </label>
                 </div>
 
-                <header>
-                    <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:18px;">Stations</h1>
-                </header>
-
                 <div>
                     <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
                         <input type="checkbox" class="english-checkbox" />
@@ -99,7 +91,7 @@
                 <div>
                     <label style = "font-family: Arial, Helvetica, sans-serif; font-size:16px;">
                         <input type="checkbox" class="spanish-checkbox" />
-                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201015180720Spanish3.svg' width="15" height="15" > Spanish Language Frequencies</img>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164502Spanish2.svg' width="15" height="15" > Spanish Language Frequencies</img>
                     </label>
                 </div>
             </div>
@@ -343,7 +335,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
                         </div>
                         <div>
                             <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.subtitle.value}</p1>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.link.value}" target="_blank">Read the story</a></p>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
                             <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
                         </div>
                     `;
@@ -406,7 +398,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
                     </div>
                     <div>
                         <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.subtitle.value}</p1>
-                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.link.value}" target="_blank">Read the story</a></p>
+                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
                         <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
                     </div>
                 `;
@@ -467,7 +459,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
                         </div>
                         <div>
                             <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.description.value}</p1>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.link.value}" target="_blank">Read the story</a></p>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
                             <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
                         </div>
                     `;
@@ -529,7 +521,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
                     </div>
                     <div>
                         <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.description.value}</p1>
-                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.link.value}" target="_blank">Watch video</a></p>
+                        <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.link.value}" target="_blank">Click here</a></p>
                         <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Location: ${feature.variables.location.value}
                         <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Attribution: ${feature.variables.attribution.value}
                     </div>
@@ -546,7 +538,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
 
     //Create visualization for pop-ups layer
         const englishVizP = new carto.Viz(`
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201015181011English2.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014163924English2.svg')
             width: 15
             strokeWidth: 0
             resolution: 8
@@ -590,8 +582,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
                             <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.station.value}</h1>
                         </div>
                         <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Frequency: ${feature.variables.frequency.value}</p1>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.homepage.value}" target="_blank">Station website</a></p>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.frequency.value}</p1>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.homepage.value}" target="_blank">Click here</a></p>
                             <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Air Times Provided: ${feature.variables.air_times_provided.value}
                         </div>
                     `;
@@ -607,7 +599,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
 
     //Create visualization for pop-ups layer
         const spanishVizP = new carto.Viz(`
-            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201015180854Spanish3.svg')
+            symbol: image('https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164636Spanish2.svg')
             width: 15
             strokeWidth: 0
             resolution: 8
@@ -647,12 +639,12 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd
                 //Add pop-up using mapboxgl
                     const coords = featureEvent.coordinates;
                     const html = `
-                        <div style="background-color: #EDAE49; border:20px solid #EDAE49;">
+                        <div style="background-color: #C0B9DD; border:20px solid #C0B9DD;">
                             <h1 style = "font-family:Arial, Helvetica, sans-serif;font-size:22px;color:rgb(255,255,255)">${feature.variables.station.value}</h1>
                         </div>
                         <div>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">Frequency: ${feature.variables.frequency.value}</p1>
-                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;"><a href="${feature.variables.homepage.value}" target="_blank">Station website</a></p>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:16px;">${feature.variables.frequency.value}</p1>
+                            <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Link: <a href="${feature.variables.homepage.value}" target="_blank">Click here</a></p>
                             <p style = "font-family:Arial, Helvetica, sans-serif;font-size:14px;">Program: ${feature.variables.program.value}
                         </div>
                     `;
