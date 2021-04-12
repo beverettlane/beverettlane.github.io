@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Story Locations, Stations Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+
+    <!-- deck.gl -->
+    <script src="https://unpkg.com/deck.gl@8.4.5/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@8.4.5/dist.min.js"></script>
+    
+    <!-- Mapbox -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+
+    <!-- Airship -->
+    <link rel="stylesheet" href="https://libs.cartocdn.com/airship-style/v2.4.1/airship.css">
+    <link rel="stylesheet" href="https://libs.cartocdn.com/airship-icons/v2.4.1/icons.css">
+    <script type="module" src="https://libs.cartocdn.com/airship-components/v2.4.1/airship/airship.esm.js"></script>
+    <script nomodule="" src="https://libs.cartocdn.com/airship-components/v2.4.1/airship/airship.js"></script>
+
+    <!-- Datatable -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        body {
+            margin: 0; 
+            height: 100%; 
+            overflow: hidden
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .tooltip {
+            background-color: #FFFFFF; 
+            border: solid 1px #CCCCCC;
+            position: absolute; 
+            display: none; 
+            z-index: 100;
+            font-family: Roboto, sans-serif;
+            color: #333333;
+            padding: 10px;
+        }
+
+        .point-mark {
+            margin-right: 4px;
+        }
+
+        h2 {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+        }
+        
+        h3 {
+            position: absolute;
+            left: 0px;
+            top: 25px;
+        }
+    </style>
+</head>
+
+<body class = "as-app-body">
+    
+    <div class="as-app">
+    
+        <!-- <header class="as-toolbar">
+            <h1 class="as-display" style="color: #FFF">YPCCC</h1>
+        </header> -->
+
+        <div class="as-content">
+    
+            <main class="as-main">
+                <div class="as-map-area">
+                    <div id="map"></div>
+                </div>
+            
+            <div class="as-map-panels">
+
+<!-- Add legend data -->
+    <div class="as-panel as-panel--top as-panel--right">
+    <div class="as-panel__element" style="max-width: 400px; padding: 10px;">
+        <header>
+            <h1 style = "font-family: 'Roboto', sans-serif;font-size:22px;">Story & Station Map</h1>
+        </header>
+        
+        <footer class="js-footer"></footer>
+
+        <header>
+            <h1 style = "font-family: 'Roboto', sans-serif;font-size:18px;">Stories</h1>
+        </header>
+        
+        <section>
+            <div class="checkboxes">
+                <div>
+                    <label class="as-body" for="radio-checkbox" style = "font-family: Georgia, sans-serif; font-size:16px;">
+                        <input class="as-checkbox-input" type="checkbox" id="radio-checkbox" onchange="render()" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164023Episodes2.svg' width="15" height="15"> Radio Episodes</img>
+                    </label>
+                </div>
+                
+                <div>
+                    <label class="as-body" for="recent-checkbox" style = "font-family: Georgia, sans-serif; font-size:16px;">
+                        <input class="as-checkbox-input" type="checkbox" id="recent-checkbox" onchange="render()" checked/>
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164232Recent2.svg' width="15" height="15"> Recent Episodes</img>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="as-body" for="article-checkbox" style = "font-family: Georgia, sans-serif; font-size:16px;">
+                        <input class="as-checkbox-input" type="checkbox" id="article-checkbox" onchange="render()" />
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014163329Article2.svg' width="15" height="15"> Article</img>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="as-body" for="video-checkbox" style = "font-family: Georgia, sans-serif; font-size:16px;">
+                        <input class="as-checkbox-input" type="checkbox" id="video-checkbox" onchange="render()" />
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164727Video2.svg' width="15" height="15"> Video</img>
+                    </label>
+                </div>
+
+                <header>
+                    <h1 style = "font-family: 'Roboto', sans-serif;font-size:18px;">Stations</h1>
+                </header>
+
+                <div>
+                    <label class="as-body" for="english-checkbox" style = "font-family: Georgia, sans-serif; font-size:16px;">
+                        <input class="as-checkbox-input" type="checkbox" id="english-checkbox" onchange="render()" />
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014163735English2.svg' width="15" height="15"> English Language Frequencies</img>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="as-body" for="spanish-checkbox" style = "font-family: Georgia, sans-serif; font-size:16px;">
+                        <input class="as-checkbox-input" type="checkbox" id="spanish-checkbox" onchange="render()" />
+                        <img src='https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201015180720Spanish3.svg' width="15" height="15" > Spanish Language Frequencies</img>
+                    </label>
+                </div>
+            </div>
+            <br>
+            <a type= button class="as-btn as-btn--primary" style = "font-family: Georgia, sans-seif; font-size:12px" href = "https://google.com/maps" target="_blank" >Go to Google Maps (for now) </a>  <a type= button class="as-btn as-btn--primary" style = "font-family: Georgia, sans-seif; font-size:12px" href = "https://google.com/maps" target="_blank"><i class="fa fa-info-circle"></i>More Info</a>
+        </section>
+        <section>
+            <div style="margin-top: 20px;">
+                <input type="text" id="txtSearch" placeholder="Search..."/>
+                <button onclick="search()"><i class="fa fa-search"></i></button>
+            </div>
+        </section>
+        </div>
+        </div>
+        </div>
+        <footer class="as-map-footer" style="max-height: 0px; padding: 0px">
+            <div style="margin-right: 0px;"">
+                <as-dropdown id="drpDatasets" style="width: 0px;"/>  
+            </div>
+            <div id="divTable" style="font-family:Roboto, sans-serif; font-size: 0px; overflow: auto;"></div>
+        </footer>
+        <h2><button onclick="plus()"><i class="fa fa-plus"></i></button></h2>
+        <h3><button onclick="minus()"><i class="fa fa-minus"></i></button></h3>
+        
+        <!--Original Footer-->
+        <!-- <footer class="as-map-footer" style="max-height: 380px; padding: 10px">
+            <div style="margin-right: 10px;"">
+                <as-dropdown id="drpDatasets" style="width: 200px;"/>  
+            </div>
+            <div id="divTable" style="font-family:Roboto, sans-serif; font-size: 12px; overflow: auto;"></div>
+        </footer> -->
+        
+        <div id="divTooltip" class="tooltip"></div>
+        </main>
+        </div>
+        </div>
+
+<!-- Set up Loader -->
+    <div id="loader">
+        <div class="CDB-LoaderIcon CDB-LoaderIcon--big">
+          <svg class="CDB-LoaderIcon-spinner" viewBox="0 0 50 50">
+            <circle class="CDB-LoaderIcon-path" cx="25" cy="25" r="20" fill="none"></circle>
+          </svg>
+        </div>
+    </div>
+
+<!-- Splash modal -->
+    <main id="modal" style="display: block; left: 45%; top: 40%;">
+        <div class="as-modal">
+            <div class="as-modal__content">     
+                <h1 class="as-title" style = "font-family: 'Roboto', sans-serif">Find climate stories in your favorite places. </h1>
+                <p class="as-body as-font--medium" style = "font-family: Georgia, sans-seif">Learn how climate change is shaping the places you know and love — and what people there are doing about it. Explore short audio stories, articles, and videos, all geolocated on our map. And if you know of a story that we have not yet covered, <a href="https://yaleclimateconnections.org/whats-your-climate-story/">tell us about it.</a></p>         
+                <br>
+                <button class="as-btn as-btn--primary" style = "font-family: Georgia, sans-seif" onclick="document.getElementById('modal').style.display='none';">Go to map</button>      
+            </div>
+        </div>
+    </main>
+
+<script>
+
+//FUNCTIONS
+
+//Creates loader
+    function hideLoader() {
+        document.getElementById('loader').style.opacity = '0';
+    }
+
+//CREATE LAYERS AND POP-UPS
+
+    // Initialization
+    async function initialize() {
+
+        //Defines User
+        deck.carto.setDefaultCredentials({
+            username: 'yale-climate-connections',
+            apiKey: 'DR4KVTj4-Ak2R48cAKodrA'
+        });
+
+        //Add basemap and set properties
+        deckgl = new deck.DeckGL({
+
+            container: 'map',
+            //mapStyle: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+            mapStyle: 'mapbox://styles/beverettlane/ckg6wxtok06kg19pc99x47hvn',
+            mapboxApiAccessToken: 'pk.eyJ1IjoiYmV2ZXJldHRsYW5lIiwiYSI6ImNrZzcyaDVucDAzNmYyd2p4ZXpwNmo5YnMifQ.SqWE9LzcCAseUoH4ehrpYA',    
+
+            initialViewState: initialViewState,
+            controller: true,
+
+            layers: [],
+
+            onHover: ({object}) => (isHovering = Boolean(object)),
+            getCursor: ({isDragging}) => (isDragging ? 'grabbing' : (isHovering ? 'pointer' : 'grab')),
+
+            // We use debounce to avoid triggering the event repeteadly
+            // We bind the dataset name to the this object in the handler
+            onViewStateChange: debounce(updateDataTable, 500),
+        });
+
+        // Initialize datasets
+        await initializeDatasets();
+
+        // Render layers
+        render();
+
+        // Initialize data table
+        initializeDataTable();
+    }
+
+    function initializeDataTable() {
+        var viewState = {
+            ...initialViewState,
+            height: deckgl.height,
+            width: deckgl.width,
+        }
+        updateDataTable({ viewState });
+    }
+
+    // Initialize datasets
+    async function initializeDatasets() {
+        
+        datasets = [
+            {
+                dataset: 'radio_episodes_layer_1',
+                name: "Radio Episodes",
+                checkboxID: 'radio-checkbox',
+                iconURL: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164157Episodes2.svg',
+                tableColumns: ['title', 'subtitle', 'link', 'location', 'air_date'],
+                tableData: []
+            },
+            {
+                dataset: 'featured_episodes_layer_2',
+                name: "Recent Episodes",
+                checkboxID: 'recent-checkbox',
+                iconURL: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164404Recent2.svg',
+                tableColumns: ['title', 'subtitle', 'link', 'location', 'air_date']
+            },
+            {
+                dataset: 'article_layer',
+                name: "Articles",
+                checkboxID: 'article-checkbox',
+                iconURL: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014163551Article2.svg',
+                tableColumns: ['title', 'subtitle_description', 'link', 'location_city']
+            },
+            {
+                dataset: 'video_layer_2',
+                name: "Videos",
+                checkboxID: 'video-checkbox',
+                iconURL: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201014164855Video2.svg',
+                tableColumns: ['title', 'subtitle_description', 'link', 'location']
+            },
+            {
+                dataset: 'english_frequencies_layer',
+                name: "English Language Frequencies",
+                checkboxID: 'english-checkbox',
+                iconURL: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201015181011English2.svg',
+                tableColumns: ['station', 'frequency', 'homepage', 'air_times_provided']
+            },
+            {
+                dataset: 'spanish_frequencies_layer',
+                name: "Spanish Language Frequencies",
+                checkboxID: 'spanish-checkbox',
+                iconURL: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/yale-climate-connections/assets/20201015180854Spanish3.svg',
+                tableColumns: ['station', 'frequency', 'homepage', 'program']
+            },
+        ];
+
+        // Initialize the dropdown
+        document.querySelector('#drpDatasets').options = [];
+        datasets.forEach(dataset => 
+            document.querySelector('#drpDatasets').options.push({
+                text: dataset.name,
+                value: dataset.dataset
+            })
+        );
+        document.querySelector('#drpDatasets').selectedOption = datasets[0].dataset;
+        document.querySelector('#drpDatasets').addEventListener('optionChanged', function (event) {
+            for (var i = 0; i < datasets.length; i++) { 
+                if (datasets[i].dataset == event.detail) {
+                    addDataTable(datasets[i]);
+                    break;
+                }
+            }
+        });
+
+        for (var i = 0; i < datasets.length; i++) {
+            datasets[i].featureCollection = await getGeoJsonFeatures(datasets[i].dataset);
+        }
+    }
+
+    // Render all the layers
+    function render() {
+
+        var layers = [];
+
+        datasets.forEach(layer => layers.push(addLayer(layer.dataset,
+                                                       layer.featureCollection.features,
+                                                       layer.checkboxID,
+                                                       layer.iconURL)));
+
+        deckgl.setProps({ layers });
+    }
+
+    // Return the dataset features in GeoJSON format
+    async function getGeoJsonFeatures(dataset)
+    {
+        const query = "SELECT * FROM " + dataset + " WHERE the_geom IS NOT NULL";
+
+        const url = getSqlApiURL(query, 'geojson');
+
+        const dataResponse = await fetch(url);
+        const features = await dataResponse.json();
+
+        return(features);
+    }
+
+    //Add deck.gl layer (visibility controlled by checkbox state)
+    function addLayer(dataset, features, checkboxID, iconURL) {
+
+        return(new deck.IconLayer({
+
+            id: dataset,
+
+            data: features,
+
+            visible: document.querySelector("#" + checkboxID).checked,
+
+            pickable: true,
+
+            getSize: d => 24,
+            getIcon: d => ({
+                url: iconURL,
+                width: 24,
+                height: 24
+            }),
+
+            getPosition: d => d.geometry.coordinates,
+
+            onClick: tooltip
+
+        }));
+    }
+
+    // Return only the features in the current viewport
+    function getViewportFeatures(features, nw, se)
+    {
+        var viewportFeatures = [];
+
+        // Filter features
+        features.forEach(function(feature) {
+
+            if (feature.geometry.coordinates[0] > nw[0] &&
+                feature.geometry.coordinates[0] < se[0] &&
+                feature.geometry.coordinates[1] < nw[1] &&
+                feature.geometry.coordinates[1] > se[1]) {
+                    viewportFeatures.push(feature);
+                }
+        });
+
+        return(viewportFeatures);
+    }
+
+    // Function triggered when the viewport changes
+    function updateDataTable({viewState}) {
+
+        initialViewState = viewState;
+
+        // Get viewport coordinates
+        const viewport = new deck.WebMercatorViewport(viewState);
+        const nw = viewport.unproject([0, 0]);
+        const se = viewport.unproject([viewport.width, viewport.height]);
+
+        // Update datasets table data
+        for (var i = 0; i < datasets.length; i++) { 
+            var tabledata = [];
+            features = getViewportFeatures(datasets[i].featureCollection.features, nw, se);
+            features.forEach(feature => tabledata.push(feature.properties));
+            datasets[i].tableData = tabledata;
+
+            // If the dataset is the selected in the dropdown,
+            // we recreate the table
+            if (datasets[i].dataset == document.querySelector("#drpDatasets").selectedOption)
+            {
+                addDataTable(datasets[i]);
+            }
+        }
+    }
+
+    // Add the selected dataset features to the table
+    function addDataTable(dataset) {
+        var columns = [];
+        dataset.tableColumns.forEach(column => columns.push({title: column, data: column}));
+
+        // We need to remove and add the table each time
+        $('#divTable').empty();
+        $('#divTable').append("<table id='tableClimateStories' class='display' width='100%''></table>");
+        $('#tableClimateStories').DataTable( {
+            data: dataset.tableData,
+            columns: columns,
+            pageLength: 5,
+            lengthMenu: [5, 10, 20, 50]
+        } );
+    }
+
+    // Debounce function, taken from underscore.js
+    // Returns a function, that, as long as it continues to be invoked, will not
+    // be triggered. The function will be called after it stops being called for
+    // N milliseconds. If `immediate` is passed, trigger the function on the
+    // leading edge, instead of the trailing.
+    function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
+
+    // Creates the HTML code for each tooltip
+    function tooltip(pickingInfo) {
+        
+        if (pickingInfo.picked) {
+
+            var htmlTooltip = '<div style="width: 200px;">';
+
+            switch (pickingInfo.layer.id) {
+                case 'radio_episodes_layer_1':
+                    htmlTooltip += getHtmlTooltip("#345A83", 
+                                                  pickingInfo.object.properties.title,
+                                                  pickingInfo.object.properties.subtitle,
+                                                  [
+                                                      { label: "Air Date", value: pickingInfo.object.properties.air_date, link: ""},
+                                                      { label: "", value: "Read the story", link: pickingInfo.object.properties.link},
+                                                      { label: "Location", value: pickingInfo.object.properties.location, link: ""}
+                                                  ]);
+                    break;
+                case 'featured_episodes_layer_2':
+                    htmlTooltip += getHtmlTooltip("#BCD3F2", 
+                                                  pickingInfo.object.properties.title,
+                                                  pickingInfo.object.properties.subtitle,
+                                                  [
+                                                      { label: "Air Date", value: pickingInfo.object.properties.air_date, link: ""},    
+                                                      { label: "", value: "Read the story", link: pickingInfo.object.properties.link},
+                                                      { label: "Location", value: pickingInfo.object.properties.location, link: ""}
+                                                  ]);
+                    break;
+                case 'article_layer':
+                    htmlTooltip += getHtmlTooltip("#00C49A", 
+                                                  pickingInfo.object.properties.title,
+                                                  pickingInfo.object.properties.subtitle_description,
+                                                  [
+                                                      { label: "", value: "Read the story", link: pickingInfo.object.properties.link},
+                                                      { label: "Location", value: pickingInfo.object.properties.location_city, link: ""}
+                                                  ]);
+                    break;
+                case 'video_layer_2':
+                    htmlTooltip += getHtmlTooltip("#ED6A5A", 
+                                                  pickingInfo.object.properties.title,
+                                                  pickingInfo.object.properties.subtitle_description,
+                                                  [
+                                                      { label: "", value: "Watch video", link: pickingInfo.object.properties.link},
+                                                      { label: "Location", value: pickingInfo.object.properties.location, link: ""},
+                                                  ]);
+                    break;
+                case 'english_frequencies_layer':
+                    htmlTooltip += getHtmlTooltip("#F3DFA2", 
+                                                  pickingInfo.object.properties.station,
+                                                  "Frequency: " + pickingInfo.object.properties.frequency,
+                                                  [
+                                                      { label: "", value: "Station website", link: pickingInfo.object.properties.homepage},
+                                                      { label: "Air Times Provided", value: pickingInfo.object.properties.air_times_provided, link: ""}
+                                                  ]);
+                    break;
+                case 'spanish_frequencies_layer':
+                    htmlTooltip += getHtmlTooltip("#F3DFA2", 
+                                                  pickingInfo.object.properties.station,
+                                                  "Frequency: " + pickingInfo.object.properties.frequency,
+                                                  [
+                                                      { label: "", value: "Station website", link: pickingInfo.object.properties.homepage},
+                                                      { label: "Program", value: pickingInfo.object.properties.program, link: ""}
+                                                  ]);
+                    break;
+            }
+
+            htmlTooltip += "</div>";
+
+            // Add the text to the tooltip and display it in the mouse click position
+            document.querySelector("#divTooltip").innerHTML = htmlTooltip;
+            document.querySelector("#divTooltip").style.top = pickingInfo.y + "px";
+            document.querySelector("#divTooltip").style.left = pickingInfo.x + "px";
+            document.querySelector("#divTooltip").style.display = "block";
+        }      
+    }
+    
+    // Create the HTML code with color, title, subtitle and additional attributes
+    function getHtmlTooltip(color, title, subtitle, additionalInfo)
+    {
+        var fontFamily = "font-family:Arial, Helvetica, sans-serif;"
+        htmlTooltip = 
+            `<div style="background-color: ${color};">
+                <div style="text-align: right; margin-right: 5px;" 
+                     onclick="document.querySelector('#divTooltip').style.display='none'">
+                     <span style="color: #FFFFFF; font-weight: bold; font-size: 10px; cursor: pointer;">X</span>
+                </div>
+                <div style="border:20px; padding: 10px"><h1 style = "${fontFamily}font-size:22px;color:rgb(255,255,255)">${title}</h1></div>
+            </div>
+            <div>
+                <p style = "${fontFamily}font-size:16px;">${subtitle}</p1>`;
+        
+        additionalInfo.forEach(attribute => 
+            htmlTooltip += (attribute.link == "") ? `<p style = ${fontFamily}font-size:14px;">${attribute.label}: ${attribute.value}`
+                                                  : `<p style = ${fontFamily}font-size:14px;"><a href="${attribute.link}" target="_blank">${attribute.value}</a></p>`
+        );            
+
+        htmlTooltip += `</div>`;
+
+        return(htmlTooltip);     
+    }
+
+    function getSqlApiURL(query, format)
+    {
+        const username = "yale-climate-connections";
+        const apiKey = "DR4KVTj4-Ak2R48cAKodrA";
+
+        let url = `https://${username}.carto.com/api/v2/sql?q=${query}&api_key=${apiKey}`;
+        
+        if (format) {
+            url += `&format=${format}`;
+        }
+
+        return(url);
+    }
+
+    async function search() {
+        var text = document.querySelector('#txtSearch').value;
+        const query = `SELECT ST_AsGeoJSON(cdb_geocode_street_point('${text}')) AS geometry`;
+        const url = getSqlApiURL(query);
+        const dataResponse = await fetch(url);
+        const results = await dataResponse.json();
+
+        const geometry = JSON.parse(results.rows[0].geometry);
+        if (geometry === null) {
+            alert("No results found");
+        }
+
+        // Just 1 result is returned, with geometry value on success
+        const [longitude, latitude] = geometry.coordinates;
+        initialViewState.longitude = longitude;
+        initialViewState.latitude = latitude;
+
+        deckgl.setProps({
+          initialViewState: {
+            ...initialViewState,
+            zoom: 14,
+            transitionInterpolator: new deck.FlyToInterpolator({speed: 1.5}),
+            transitionDuration: 'auto'
+          }
+        })
+    }
+
+    function plus() {
+        initialViewState.zoom = initialViewState.zoom + 1;
+        deckgl.setProps({
+            initialViewState: { ...initialViewState }
+        });
+        //console.log("New zoom level: " + initialViewState.zoom);
+    }
+
+    function minus() {
+        initialViewState.zoom = initialViewState.zoom - 1;
+        deckgl.setProps({
+            initialViewState: { ...initialViewState }
+        });
+        //console.log("New zoom level: " + initialViewState.zoom);
+    }
+
+    // Global variables
+    var deckgl;
+    var datasets;
+    var isHovering = false;
+    let initialViewState = {
+        latitude: 40,
+        longitude: -80,
+        zoom: 4
+    };
+
+    // Initialize the application
+    initialize();
+
+</script>
+</body>
+</html>
